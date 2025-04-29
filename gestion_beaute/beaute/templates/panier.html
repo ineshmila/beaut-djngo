@@ -1,0 +1,227 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Cosmetics Products </title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/css/lightgallery.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="../static/style.css">
+
+</head>
+<style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    
+    
+    .modal-content {
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      position: relative;
+    }
+    
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: black;
+    }
+    
+    #addProductForm input[type="text"],
+    #addProductForm input[type="submit"] {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    
+    #addProductForm input[type="submit"] {
+      background: #f06d6d;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    </style>
+    
+<body>
+
+<!-- header section starts  -->
+
+<header class="header">
+
+    <a href="#home" class="logo"> <img src="../static/image/logo.png" alt=""> </a>
+
+    <form action="" class="search-form">
+        <input type="search" name="" placeholder="search here..." id="search-box">
+        <label for="search-box" class="fas fa-search"></label>
+    </form>
+
+    <div class="icons">
+        
+        <div id="search-btn" class="fas fa-search"></div>
+        <a href="{% url 'featured_products' %}" class="fas fa-home"></a>
+        <a href="{% url 'logout' %}" class="fas fa-sign-out-alt"></a>
+
+        <a href="{% url 'panier' %}" class="fas fa-shopping-cart"></a>
+    </div>
+
+</header>
+
+<!-- navbar section  -->
+
+<nav class="navbar">
+    <div id="close-navbar" class="fas fa-times"></div>
+    <a href="{% url 'logout' %}">deconnetion</a>
+
+</nav>
+
+<style>
+    /* Style général du panier */
+    .panier {
+        padding: 50px 20px;
+        background: #fff9fb; /* fond très doux rose-blanc */
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Titre principal */
+    .panier .heading h1 {
+        text-align: center;
+        color: #e84393; /* rose doux */
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+    }
+    
+    /* Conteneur des items */
+    .panier-items {
+        max-width: 1000px;
+        margin: auto;
+    }
+    
+    /* Chaque ligne d'article */
+    .items {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    /* Carte produit */
+    .item {
+        display: flex;
+        align-items: center;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(255, 107, 154, 0.1);
+        padding: 15px 20px;
+        transition: transform 0.3s;
+    }
+    
+    .item:hover {
+        transform: translateY(-5px);
+    }
+    
+    /* Image produit */
+    .image img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 15px;
+        margin-right: 20px;
+    }
+    
+    /* Contenu du produit */
+    .content {
+        flex: 1;
+    }
+    
+    .content p {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .quantity {
+        font-size: 0.9rem;
+        color: #777;
+        margin-bottom: 5px;
+    }
+    
+    .price {
+        font-size: 1rem;
+        color: #ff6b9a;
+        font-weight: bold;
+    }
+    
+    /* Total panier */
+    .total {
+        margin-top: 30px;
+        text-align: right;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #e84393;
+    }
+    </style>
+<section class="panier" id="panier">
+    <div class="heading">
+        <h1>Votre Panier</h1>
+    </div>
+
+    <div class="panier-items">
+        {% if panier_items %}
+            <div class="items">
+                {% for item in panier_items %}
+                    <div class="item">
+                        <div class="image">
+                            {% if item.produit.image %}
+                                <img src="{{ item.produit.image.url }}" alt="{{ item.produit.nom }}">
+                            {% endif %}
+                        </div>
+                        <div class="content">
+                            <p>{{ item.produit.nom }}</p>
+                            <div class="quantity">
+                                <span>Quantité: </span>{{ item.quantite }}
+                            </div>
+                            <div class="price">{{ item.produit.prix }}€</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="total">
+                <p>Total: {{ total }}€</p>
+            </div>
+        {% else %}
+            <p>Votre panier est vide.</p>
+        {% endif %}
+    </div>
+</section>
+    

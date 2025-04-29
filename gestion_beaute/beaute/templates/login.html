@@ -1,0 +1,145 @@
+<style>
+    /* Thème Cosmétique avec image de fond */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: url('../static/image/about-bg.jpg') no-repeat center center/cover;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding-left: 8%;
+        backdrop-filter: brightness(0.8);
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 500px; /* 🔥 plus large qu'avant */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* centre le titre et le formulaire ensemble */
+    }
+    
+    h1 {
+        color: #ffffff;
+        text-align: center; /* centre par rapport au conteneur */
+        margin-bottom: 30px;
+        font-size: 3.2rem; /* légèrement plus grand */
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    form {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px 30px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        width: 85%;
+        transition: transform 0.3s ease;
+    }
+    
+    form:hover {
+        transform: translateY(-5px);
+    }
+    
+    form p {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+    
+    form label {
+        margin-bottom: 8px;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 15px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.185);
+    }
+    
+    form input {
+        padding: 12px;
+        border: none;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        outline: none;
+        font-size: 16px;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+    
+    form input:focus {
+        background-color: #ffffff;
+        transform: scale(1.02);
+    }
+    
+    button[type="submit"] {
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 10px;
+        transition: background 0.4s, transform 0.3s;
+    }
+    
+    button[type="submit"]:hover {
+        background: linear-gradient(135deg, #fad0c4, #ff9a9e);
+        transform: translateY(-2px);
+    }
+    
+    .signup-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .signup-link a {
+        color: #ffffff;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 15px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    .signup-link a:hover {
+        text-decoration: underline;
+    }
+    
+    p[style="color: red;"] {
+        color: #ff1744 !important;
+        text-align: center;
+        margin-top: 15px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    </style>
+    
+    <body>
+    
+        <div class="container">
+            <h1>Connexion</h1>
+    
+            <form method="POST">
+                {% csrf_token %}
+                
+                {{ form.as_p }} <!-- Affiche les champs du formulaire -->
+                
+                <button type="submit">Se connecter</button>
+    
+                <div class="signup-link">
+                    <p>Pas encore de compte ? <a href="{% url 'signup' %}">Créer un compte</a></p>
+                </div>
+            </form>
+    
+            {% if error %}
+                <p style="color: red;">{{ error }}</p> <!-- Affiche les erreurs -->
+            {% endif %}
+        </div>
+    
+    </body>
+    

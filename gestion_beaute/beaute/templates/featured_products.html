@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Cosmetics Products </title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/css/lightgallery.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="../static/style.css">
+
+</head>
+<style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    
+    .modal-content {
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      position: relative;
+    }
+    
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: black;
+    }
+    
+    #addProductForm input[type="text"],
+    #addProductForm input[type="submit"] {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    
+    #addProductForm input[type="submit"] {
+      background: #f06d6d;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    </style>
+    
+<body>
+
+<!-- header section starts  -->
+
+<header class="header">
+
+    <a href="#home" class="logo"> <img src="../static/image/logo.png" alt=""> </a>
+
+    <form action="" class="search-form">
+        <input type="search" name="" placeholder="search here..." id="search-box">
+        <label for="search-box" class="fas fa-search"></label>
+    </form>
+
+    <div class="icons">
+        <div id="menu-btn" class="fas fa-bars"></div>
+        <div id="search-btn" class="fas fa-search"></div>
+        <a href="{% url 'logout' %}" class="fas fa-sign-out-alt"></a>
+        <a href="{% url 'panier' %}" class="fas fa-shopping-cart"></a>
+    </div>
+
+</header>
+
+<!-- navbar section  -->
+
+<nav class="navbar">
+    <div id="close-navbar" class="fas fa-times"></div>
+    <a href="{% url 'logout' %}">deconnetion</a>
+</nav>
+
+<section class="shop" id="shop">
+
+    <div class="heading">
+        <h1>featured products</h1>
+    </div>
+
+    <div class="swiper products-slider">  <!-- UNE SEULE FOIS -->
+        <div class="swiper-wrapper">       <!-- UNE SEULE FOIS -->
+
+            {% for produit in produits %}
+            <div class="swiper-slide slide"> <!-- CHAQUE PRODUIT -->
+                <div class="image">
+                    <span class="discount">-25%</span>
+                    {% if produit.image %}
+                    <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+                    {% endif %}
+                    <div class="icons">
+                      <a href="#" 
+   class="fas fa-shopping-cart" 
+   onclick="confirmerAjout('{{ produit.id }}')">
+</a>
+
+                                         <a href="#" class="fas fa-heart"></a>
+                        <a href="#" class="fas fa-share"></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p>{{ produit.nom }}</p>
+                    <div class="price">{{ produit.prix }}€ <span>{{ produit.prix }}€</span></div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+        <div class="swiper-button-next"></div>
+<div class="swiper-button-prev"></div>
+    </div>
+
+</section>
+
+<section class="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3>quick links</h3>
+            <a class="link" href="#home"> <i class="fas fa-angle-right"></i> home</a>
+            <a class="link" href="#shop"> <i class="fas fa-angle-right"></i> shop</a>
+            <a class="link" href="#gallery"> <i class="fas fa-angle-right"></i> gallery</a>
+            <a class="link" href="#team"> <i class="fas fa-angle-right"></i> team</a>
+            <a class="link" href="#arrivals"> <i class="fas fa-angle-right"></i> arrivals</a>
+            <a class="link" href="#blogs"> <i class="fas fa-angle-right"></i> blogs</a>
+        </div>
+
+        <div class="box">
+            <h3>extra links</h3>
+            <a href="#" class="link"> <i class="fas fa-angle-right"></i> my order </a>
+            <a href="#" class="link"> <i class="fas fa-angle-right"></i> my favorite </a>
+            <a href="#" class="link"> <i class="fas fa-angle-right"></i> my wishlist </a>
+            <a href="#" class="link"> <i class="fas fa-angle-right"></i> private policy </a>
+            <a href="#" class="link"> <i class="fas fa-angle-right"></i> terms of use </a>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <p> <i class="fas fa-phone"></i> 73 73 73 73 </p>
+            <p> <i class="fas fa-phone"></i> +216 22222222 </p>
+            <p> <i class="fas fa-envelope"></i>emnaines@gmail.com </p>
+            <p> <i class="fas fa-map"></i> Sousse - Tunisia </p>
+            <div class="share">
+                <a  target="blank" href="https://www.facebook.com/Cosmetic-products-107189341831016" class="fab fa-facebook-f"></a>
+                <a target="blank" href="https://www.instagram.com/shop_msaken/" class="fab fa-instagram"></a>
+            </div>
+        </div>
+
+        <div class="box">
+            <h3>newsletter</h3>
+            <p>subscribe for latest updates</p>
+            <form action="">
+                <input type="email" name="" placeholder="enter your email" id="" class="email">
+                <input type="submit" value="subscribe" class="btn">
+            </form>
+        </div>
+
+    </div>
+
+
+</section>
+
+<!-- footer section ends -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/js/lightgallery.min.js"></script>
+
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<!-- custom js file link      -->
+<script src="../static/script.js"></script>
+
+<script>
+    lightGallery(document.querySelector('.gallery .lightbox'));
+</script>
+<div id="productModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Ajouter un Produit</h2>
+  
+      <form id="addProductForm" enctype="multipart/form-data">
+        <div>
+          <label>Nom du produit :</label><br>
+          <input type="text" name="productName" required>
+        </div>
+        <br>
+        <div>
+          <label>Prix :</label><br>
+          <input type="number" name="price" required>
+        </div>
+        <br>
+        <div>
+          <label>Image :</label><br>
+          <input type="file" name="productImage" accept="image/*" required>
+        </div>
+        <br>
+        <button type="submit" class="btn">Enregistrer</button>
+      </form>
+  
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var modal = document.getElementById("productModal");
+      var btn = document.getElementById("openModalBtn");
+      var span = document.getElementsByClassName("close")[0];
+      var form = document.getElementById("addProductForm");
+  
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+  
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+  
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+  
+      form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        var formData = new FormData(form);
+  
+        console.log("Nom Produit:", formData.get("productName"));
+        console.log("Prix:", formData.get("price"));
+        console.log("Image fichier:", formData.get("productImage"));
+  
+        // Ici tu pourrais envoyer formData avec un fetch POST vers ton serveur
+        // fetch('/upload', { method: 'POST', body: formData });
+  
+        modal.style.display = "none";
+      });
+    });
+  </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script>
+function confirmerAjout(produitId) {
+    Swal.fire({
+        title: 'Ajouter au panier ?',
+        text: "Souhaitez-vous ajouter ce produit à votre panier ?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ff6b9a', // couleur du bouton confirmer
+        cancelButtonColor: '#6c757d',  // couleur du bouton annuler
+        confirmButtonText: 'Oui, ajouter',
+        cancelButtonText: 'Non, annuler',
+        backdrop: `
+          rgba(255, 107, 154, 0.1) 
+          left top 
+          no-repeat
+        `
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "/ajouter_au_panier/" + produitId + "/";
+        }
+    })
+}
+</script>
+
+      
+</body>
+</html>
